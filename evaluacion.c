@@ -12,8 +12,6 @@ Tema:
 /*Prototipos*/
 void leertablero(char [][COLUMNAS]);
 void mostrar_tab(char [][COLUMNAS]);
-void ajuste_tablero(char[][COLUMNAS], int);
-void borrar_fila(char [][COLUMNAS], int);
 
 /*Funcion principal*/
 int main(){
