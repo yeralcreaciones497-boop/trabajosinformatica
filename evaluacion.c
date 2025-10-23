@@ -6,36 +6,32 @@ Tema:
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define ESPACIO 49 
+#define FILAS 8
+#define COLUMNAS 7
 
 /*Prototipos*/
-void leertablero(char []);
-void mostrar_tab(char []);
+void leertablero(char [][COLUMNAS]);
+void mostrar_tab(char [][COLUMNAS]);
 
 /*Funcion principal*/
 int main(){
-    char tablero[ESPACIO];
+    char tablero[FILAS][COLUMNAS];
     leertablero(tablero);
-    mostrar_tab(tablero);
     return 0;
 }
 
 /*Funciones*/
-void leertablero(char tab[]){
-    int i = 0, j = 0;
-    while (scanf("%s", tab) != EOF) {
-        printf("%s", tab);
-        i++;
-        if (i == 1){
-            printf("\n");
-            i = 0;
-        }
+void leertablero(char tab[FILAS][COLUMNAS]){
+    int i = 0;
+    for ( i = 0; i < FILAS; i++){
+        scanf("%s", tab[i]);
+        printf("%c\n", tab[i][1]);
     }
 }
 
-void mostrar_tab(char tab[]){
+void mostrar_tab(char tab[FILAS][COLUMNAS]){
     int i, j;
-    for(i = 0; i < ESPACIO -1; i++){
-        printf("%2s", tab[i]);
+    for(i = 0; i < FILAS; i++){
+        printf("%s", tab[i]);
     }
 }
