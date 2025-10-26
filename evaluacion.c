@@ -17,21 +17,20 @@ typedef struct orden{      /*Guardar datos futuros, ya que el orden saldra inver
 
 /*Prototipos*/
 void leertablero(char [][COLUMNAS]);
-void mostrar(int );
+void mostrar(int , ORDEN );
 int fichas_actuales(char [][COLUMNAS]);
-int resolver(char [][COLUMNAS], int *);
+int resolver(char [][COLUMNAS], int *, ORDEN *);
 void respaldo(char [][COLUMNAS], char [][COLUMNAS]);
-void guardar(int *, int, int, int, int);
-
-ORDEN real; /*Lo siento, no encontre otra solucion para la estructura*/
+void guardar(int *, int, int, int, int, ORDEN *);
 
 /*Funcion principal*/
 int main(){
+    ORDEN real;
     char tablero[FILAS][COLUMNAS];
     int contador = 0;
     leertablero(tablero);
-    resolver(tablero, &contador);
-    mostrar(contador);
+    resolver(tablero, &contador, &real);
+    mostrar(contador, real);
     return 0;
 }
 
@@ -47,10 +46,10 @@ void leertablero(char tab[FILAS][COLUMNAS]){
     }
 }
 
-void mostrar(int paso){  /*des: abreviacion de "desde"; has: hasta*/
+void mostrar(int paso, ORDEN real){  /*des: abreviacion de "desde"; has: hasta*/
     int i, j = 1;
     printf("En 31 movimientos se encontro la solucion\n");
-    for (i = paso; i >= 0; i--){
+    for (i = paso; i > 0; i--){
         printf("%d: posicion <%d,%d> a posicion <%d,%d>\n", j, real.origen_x[i], real.origen_y[i], real.salta_x[i], real.salta_y[i]); /*Consideramos la casilla 0 como 1*/
         j++;
     }
@@ -68,7 +67,7 @@ int fichas_actuales(char tab[FILAS][COLUMNAS]){
     return c;
 }
 
-int resolver(char tab[FILAS][COLUMNAS], int *contador){
+int resolver(char tab[FILAS][COLUMNAS], int *contador, ORDEN *real){
     int centro_f, centro_c;
     char clon[FILAS][COLUMNAS];
     int x, y, movimientos, i, j;
@@ -86,16 +85,16 @@ int resolver(char tab[FILAS][COLUMNAS], int *contador){
                 for (movimientos = 0; movimientos < 4; movimientos++){
                     x = i + movx[movimientos];
                     y = j + movy[movimientos];
-                    salto_x = i + 2*movx[movimientos];
-                    salto_y = j + 2*movy[movimientos];
+                    salto_x = i + 2 * movx[movimientos];
+                    salto_y = j + 2 * movy[movimientos];
                     if(salto_x >= 0 && salto_x < FILAS && salto_y >= 0 && salto_y < COLUMNAS && tab[x][y] == 'X' && tab[salto_x][salto_y] == ' '){
                         respaldo(tab, clon);
                         clon[i][j] = ' ';
                         clon[x][y] = ' ';
                         clon[salto_x][salto_y] = 'X';
-                        if(resolver(clon, contador)){
+                        if(resolver(clon, contador, real)){
                             (*contador)++;
-                            guardar(contador, i, j, salto_x, salto_y);
+                            guardar(contador, i, j, salto_x, salto_y, real);
                             return 1;
                         }
                     }
@@ -115,9 +114,9 @@ void respaldo(char original[FILAS][COLUMNAS], char clon[FILAS][COLUMNAS]){
     }
 }
 
-void guardar(int *paso, int des_x, int des_y, int salto_x, int salto_y){
-    real.origen_x[*paso] = des_x + 1;
-    real.origen_y[*paso] = des_y + 1;
-    real.salta_x[*paso] = salto_x + 1;
-    real.salta_y[*paso] = salto_y + 1;
+void guardar(int *paso, int des_x, int des_y, int salto_x, int salto_y, ORDEN *real){
+    real->origen_x[*paso] = des_x + 1;
+    real->origen_y[*paso] = des_y + 1;
+    real->salta_x[*paso] = salto_x + 1;
+    real->salta_y[*paso] = salto_y + 1;
 }
